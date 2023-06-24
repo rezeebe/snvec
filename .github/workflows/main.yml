@@ -1,0 +1,20 @@
+name: extract .tar.gz on upload
+on:
+  push:
+    paths:
+    - '**.tar.gz'
+jobs:
+  extract-tar-gz:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: unzip
+        # find the file and unzip it
+        run: |
+          find . -name '*.tar.gz' -exec tar -xvf {} \;
+      # Commit all changed files back to the repository
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: extract .tar.gz file
